@@ -27,10 +27,11 @@ public class Player : MonoBehaviour
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
 
-        if(Input.GetKeyDown(KeyCode.Space) && CheckGrounded())
+        if(CheckGrounded() && Input.GetKeyDown(KeyCode.Space))
         {
-            _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
+            _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);            
             StartCoroutine(ResetJumpRoutine());
+            _playerAnim.JumpAnim(true);
         }
 
         _rb.velocity = new Vector2(horizontal * _runSpeed * Time.deltaTime, _rb.velocity.y);
@@ -39,15 +40,16 @@ public class Player : MonoBehaviour
 
     bool CheckGrounded()
     {
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, 0.6f, _groundLayer);
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, 1, _groundLayer);
+        Debug.DrawRay(transform.position, Vector2.down, Color.green);
         if(hitInfo.collider != null)
         {
             if(!_resetJump)
             {
+                _playerAnim.JumpAnim(false);
                 return true;
             }           
-        }
-
+        }        
         return false;
     }
 
