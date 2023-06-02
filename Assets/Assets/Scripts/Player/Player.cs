@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     [SerializeField] float _jumpForce = 5f;
     [SerializeField] LayerMask _groundLayer;
     bool _resetJump = false;
+    float horizontal;
 
     PlayerAnimation _playerAnim;
     void Awake()
@@ -20,12 +21,13 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        Movement(); 
+        Movement();
+        Attack();
     }
 
     void Movement()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
+        horizontal = Input.GetAxisRaw("Horizontal");
 
         if(CheckGrounded() && Input.GetKeyDown(KeyCode.Space))
         {
@@ -58,5 +60,13 @@ public class Player : MonoBehaviour
         _resetJump = true;
         yield return new WaitForSeconds(0.1f);
         _resetJump = false;
+    }
+
+    void Attack()
+    {
+        if(Input.GetMouseButtonDown(0) && CheckGrounded()) 
+        {
+            _playerAnim.AttackAnim(horizontal);
+        }
     }
 }
