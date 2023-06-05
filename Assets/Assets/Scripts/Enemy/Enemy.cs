@@ -16,6 +16,7 @@ public abstract class Enemy : MonoBehaviour
     protected SpriteRenderer spriteRenderer;
 
     protected bool isHit = false;
+    protected bool isDead = false;
     protected Player player;
     public virtual void Init()
     {
@@ -36,7 +37,11 @@ public abstract class Enemy : MonoBehaviour
         {
             return;
         }
-        Movement();
+        if(!isDead)
+        {
+            Movement();
+        }
+        
     }
 
     public virtual void Movement()
@@ -72,6 +77,21 @@ public abstract class Enemy : MonoBehaviour
         {
             isHit = false;
             animator.SetBool("InCombat", false);
+        }
+
+
+        Vector3 direction = player.transform.localPosition - transform.position;
+
+        if (animator.GetBool("InCombat"))
+        {
+            if (direction.x < 0)
+            {
+                spriteRenderer.flipX = true;
+            }
+            else
+            {
+                spriteRenderer.flipX = false;
+            }
         }
 
     }
