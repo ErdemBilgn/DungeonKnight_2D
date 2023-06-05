@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamageable
 {
     Rigidbody2D _rb;
     [SerializeField] float _runSpeed = 5f;
@@ -10,6 +10,10 @@ public class Player : MonoBehaviour
     [SerializeField] LayerMask _groundLayer;
     bool _resetJump = false;
     float horizontal;
+
+    public int Health { get; set;}
+
+
 
     PlayerAnimation _playerAnim;
     void Awake()
@@ -68,5 +72,10 @@ public class Player : MonoBehaviour
         {
             _playerAnim.AttackAnim(horizontal);
         }
+    }
+
+    public void Damage()
+    {
+        Debug.Log("Player damaged");
     }
 }
