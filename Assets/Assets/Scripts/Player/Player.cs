@@ -12,7 +12,7 @@ public class Player : MonoBehaviour, IDamageable
     float horizontal;
 
     public int Health { get; set;}
-
+    public int _diamonds;
 
 
     PlayerAnimation _playerAnim;

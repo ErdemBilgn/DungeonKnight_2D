@@ -6,13 +6,13 @@ public class Skeleton : Enemy, IDamageable
 {
     public int Health { get; set; }
 
-    public override void Init()
+    protected override void Init()
     {
         base.Init();
         Health = base.maxHealth;
     }
 
-    public override void Movement()
+    protected override void Movement()
     {
         base.Movement();
     }
@@ -28,8 +28,7 @@ public class Skeleton : Enemy, IDamageable
 
         if(Health < 1)
         {
-            isDead = true;
-            animator.SetTrigger("Death");
+            StartCoroutine(Die());
         }
     }
 }

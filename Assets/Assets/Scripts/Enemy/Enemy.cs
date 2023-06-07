@@ -10,6 +10,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected int gems;
 
     [SerializeField] protected Transform pointA, pointB;
+    [SerializeField] protected GameObject diamondPrefab;
 
     protected Vector3 currentTarget;
     protected Animator animator;
@@ -18,7 +19,7 @@ public abstract class Enemy : MonoBehaviour
     protected bool isHit = false;
     protected bool isDead = false;
     protected Player player;
-    public virtual void Init()
+    protected virtual void Init()
     {
         currentTarget = pointB.position;
         animator = GetComponentInChildren<Animator>();
@@ -31,7 +32,7 @@ public abstract class Enemy : MonoBehaviour
         Init();
     }
 
-    public virtual void Update()
+    protected virtual void Update()
     {
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && !animator.GetBool("InCombat")) // Iddle playing
         {
@@ -44,7 +45,7 @@ public abstract class Enemy : MonoBehaviour
         
     }
 
-    public virtual void Movement()
+    protected virtual void Movement()
     {
 
 
@@ -94,6 +95,36 @@ public abstract class Enemy : MonoBehaviour
             }
         }
 
+    }
+
+    protected IEnumerator SpawnGems()
+    {
+        float diamondForce = 7f;
+
+        
+        for (int i = 0; i < gems ; i++)
+        {
+            Vector3 randomOffset = Random.insideUnitSphere * diamondForce;
+            if(randomOffset.y < 0)
+            {
+                randomOffset.y *= -1;
+            }
+
+            GameObject diamond = Instantiate(diamondPrefab, transform.position, Quaternion.identity);
+
+            diamond.GetComponent<Rigidbody2D>().AddForce(randomOffset, ForceMode2D.Impulse);
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    protected IEnumerator Die()
+    {
+        isDead = true;
+        animator.SetTrigger("Death");
+        StartCoroutine(SpawnGems());
+        GetComponent<BoxCollider2D>().enabled = false;
+        yield return new WaitForSeconds(4f);
+        Destroy(this.gameObject);
     }
 
 }

@@ -8,13 +8,13 @@ public class Spider : Enemy, IDamageable
 
     [SerializeField] GameObject acidPrefab;
 
-    public override void Init()
+    protected override void Init()
     {
         base.Init();
         Health = base.maxHealth;
     }
 
-    public override void Update()
+    protected override void Update()
     {
 
     }
@@ -24,18 +24,18 @@ public class Spider : Enemy, IDamageable
         Health--;
         if(Health < 1)
         {
-            isDead = true;
-            animator.SetTrigger("Death");
+            StartCoroutine(Die());
         }
     }
 
-    public override void Movement()
+    protected override void Movement()
     {
         //Sit still.
     }
 
     public void AcidAttack()
     {
+
         Instantiate(acidPrefab, transform.position, Quaternion.identity);
     }
 }
