@@ -11,8 +11,6 @@ public class Attack : MonoBehaviour
     {
         if (!_canDamage) return;
 
-        Debug.Log("Hit: " + other.gameObject.name);
-
         IDamageable hit = other.GetComponent<IDamageable>();
         if(hit != null)
         {

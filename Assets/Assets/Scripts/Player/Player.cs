@@ -19,7 +19,8 @@ public class Player : MonoBehaviour, IDamageable
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
-        _playerAnim = GetComponentInChildren<PlayerAnimation>();  
+        _playerAnim = GetComponentInChildren<PlayerAnimation>();
+        Health = 4;
     }
 
 
@@ -32,7 +33,10 @@ public class Player : MonoBehaviour, IDamageable
     void Movement()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
-
+        if(horizontal == 0)
+        {
+            _rb.velocity = new Vector2(0, _rb.velocity.y);
+        }
         if(CheckGrounded() && Input.GetKeyDown(KeyCode.Space))
         {
             _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);            
@@ -40,7 +44,8 @@ public class Player : MonoBehaviour, IDamageable
             _playerAnim.JumpAnim(true);
         }
 
-        _rb.velocity = new Vector2(horizontal * _runSpeed * Time.deltaTime, _rb.velocity.y);
+        transform.Translate(Vector3.right * horizontal * _runSpeed * Time.deltaTime);
+        //_rb.velocity = new Vector2(horizontal * _runSpeed * Time.deltaTime, _rb.velocity.y);
         _playerAnim.RunAnim(horizontal);
     }
 
@@ -76,6 +81,23 @@ public class Player : MonoBehaviour, IDamageable
 
     public void Damage()
     {
+        if (Health <= 0)
+        {
+            return;
+        }
         Debug.Log("Player damaged");
+        Health--;
+        UIManager.Instance.UpdateLives(Health);
+        if(Health <= 0)
+        {
+            _playerAnim.DeathAnim();
+        }
     }
+
+    public void AddGems()
+    {
+        _diamonds++;
+        UIManager.Instance.UpdateGemCount(_diamonds);
+    }
+
 }

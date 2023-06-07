@@ -15,7 +15,8 @@ public class Diamond : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            player._diamonds++;
+            player.AddGems();
+            
             Destroy(this.gameObject);
         }
         else if (other.CompareTag("Ground"))
