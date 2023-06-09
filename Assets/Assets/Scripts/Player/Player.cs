@@ -13,7 +13,7 @@ public class Player : MonoBehaviour, IDamageable
 
     public int Health { get; set;}
     public int _diamonds;
-
+    public bool isDead = false;
 
     PlayerAnimation _playerAnim;
     void Awake()
@@ -26,6 +26,7 @@ public class Player : MonoBehaviour, IDamageable
 
     void Update()
     {
+        if (isDead) return;
         Movement();
         Attack();
     }
@@ -90,7 +91,7 @@ public class Player : MonoBehaviour, IDamageable
         UIManager.Instance.UpdateLives(Health);
         if(Health <= 0)
         {
-            _playerAnim.DeathAnim();
+            StartCoroutine(Death());
         }
     }
 
@@ -98,6 +99,14 @@ public class Player : MonoBehaviour, IDamageable
     {
         _diamonds++;
         UIManager.Instance.UpdateGemCount(_diamonds);
+    }
+
+    IEnumerator Death()
+    {
+        _playerAnim.DeathAnim();
+        isDead = true;
+        yield return new WaitForSeconds(3f);
+        GameManager.Instance.ReturnToMainMenu();
     }
 
 }

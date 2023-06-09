@@ -42,6 +42,11 @@ public abstract class Enemy : MonoBehaviour
         {
             Movement();
         }
+        if(player.isDead)
+        {
+            animator.SetBool("InCombat", false);
+            animator.SetTrigger("Idle");
+        }
         
     }
 

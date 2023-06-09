@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
+    [SerializeField] float attackCoolDown = 0.7f;
     bool _canDamage = true;
 
     void OnTriggerEnter2D(Collider2D other)
@@ -22,7 +23,7 @@ public class Attack : MonoBehaviour
     IEnumerator DamageCooldownRoutine()
     {
         _canDamage = false;
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(attackCoolDown);
         _canDamage = true;
     }
 }
